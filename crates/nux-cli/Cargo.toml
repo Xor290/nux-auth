@@ -1,0 +1,34 @@
+[package]
+name = "nux-cli"
+description = "Démon et outil en ligne de commande Nux-Auth (modes Client et Guard)."
+version.workspace = true
+edition.workspace = true
+license = "MIT"
+repository.workspace = true
+rust-version.workspace = true
+
+[[bin]]
+name = "nux"
+path = "src/main.rs"
+
+[dependencies]
+nux-core = { workspace = true }
+libp2p = { workspace = true }
+tokio = { workspace = true }
+tokio-util = { workspace = true }
+clap = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+toml = { workspace = true }
+toml_edit = { workspace = true }
+hex = { workspace = true }
+dotenvy = { workspace = true }
+rand.workspace = true
+rustix = { workspace = true }
+reqwest = { workspace = true }
+tracing-appender = "0.2.5"
+
+[lints]
+workspace = true

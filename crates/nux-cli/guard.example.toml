@@ -1,0 +1,34 @@
+listen = "/ip4/0.0.0.0/tcp/4588"
+
+[rate_limit]
+max = 30
+window_secs = 60
+exempt = ["203.0.113.9"]
+
+[[allow]]
+peer = "12D3KooWKSWk8v2CzzcPzUEeVZs4t3ZW7cVEktBAowuxCsSbnPmb"
+roles = ["db-writer", "metrics"]
+
+[[expose]]
+name = "postgres"
+port = 5432
+role = "db-writer"
+
+[[expose]]
+name = "redis"
+port = 6379
+
+[[checksum_bin]]
+peer = "12D3KooWKSWk8v2CzzcPzUEeVZs4t3ZW7cVEktBAowuxCsSbnPmb"
+sha256 = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b85"
+
+# Optionnel : uniquement si ce Guard n'a pas d'adresse publique joignable.
+# Réserve un circuit auprès d'un nœud nux-relay (voir nodes_relay/) pour
+# rester joignable par les Clients derrière NAT.
+# relay = "/ip4/203.0.113.10/tcp/4001/p2p/12D3KooWAbCdEf..."
+
+# Optionnel : exige `relay` ci-dessus (l'enregistrement transite par cette
+# même connexion). Permet à un Client de retrouver ce Guard par ce nom
+# logique (--dial discover:<namespace>@<rendezvous_multiaddr>) sans en
+# connaître l'adresse.
+# namespace = "prod-db"
