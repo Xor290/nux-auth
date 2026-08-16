@@ -1,0 +1,49 @@
+# Campagne cargo-fuzz du cadrage (§4) : la surface attaquable est la
+# désérialisation bincode des messages venus du réseau. Chaque cible vérifie
+# qu'aucune entrée ne provoque de panique et que tout message accepté se
+# réencode à l'identique (stabilité du format filaire).
+#
+#     cargo +nightly fuzz run decode_request
+#     cargo +nightly fuzz run decode_response
+#     cargo +nightly fuzz run decode_tunnel_header
+
+[package]
+name = "nux-core-fuzz"
+version = "0.0.0"
+publish = false
+edition = "2024"
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+libfuzzer-sys = "0.4"
+nux-core = { path = "../crates/nux-core" }
+
+# Crate volontairement hors du workspace racine : cargo-fuzz impose ses
+# propres profils et flags (sanitizers, nightly).
+[workspace]
+
+[[bin]]
+name = "decode_request"
+path = "fuzz_targets/decode_request.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "decode_response"
+path = "fuzz_targets/decode_response.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "decode_tunnel_header"
+path = "fuzz_targets/decode_tunnel_header.rs"
+test = false
+doc = false
+bench = false
+
+[profile.release]
+debug = 1
