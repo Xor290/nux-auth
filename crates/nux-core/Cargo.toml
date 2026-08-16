@@ -1,0 +1,32 @@
+[package]
+name = "nux-core"
+description = "Moteur Nux-Auth : identité cryptographique, pile réseau libp2p et protocole d'authentification challenge-response."
+version.workspace = true
+edition.workspace = true
+license = "MIT"
+repository.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+libp2p = { workspace = true }
+libp2p-stream = { workspace = true }
+tokio = { workspace = true }
+tokio-util = { workspace = true }
+serde = { workspace = true }
+bincode = { workspace = true }
+zeroize = { workspace = true }
+constant_time_eq = { workspace = true }
+rand = { workspace = true }
+futures = { workspace = true }
+async-trait = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+hex = { workspace = true }
+sha2 = { workspace = true }
+rustix = { workspace = true }
+
+[dev-dependencies]
+tokio = { workspace = true }
+
+[lints]
+workspace = true
