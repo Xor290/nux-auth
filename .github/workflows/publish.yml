@@ -1,0 +1,77 @@
+name: Publish
+
+# Déclenché par un tag `<crate>-v<version>` (ex. `nux-core-v0.1.1` ou
+# `nux-cli-v0.1.1`) — préfixé par crate pour publier indépendamment chaque
+# membre du workspace.
+#
+#   git tag nux-core-v0.1.1 && git push origin nux-core-v0.1.1
+#   git tag nux-cli-v0.1.1  && git push origin nux-cli-v0.1.1
+on:
+  push:
+    tags:
+      - "nux-core-v*"
+      - "nux-cli-v*"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  publish:
+    name: test, clippy puis cargo publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Détermine le dossier et la version à partir du tag
+        id: crate
+        run: |
+          case "$GITHUB_REF_NAME" in
+            nux-core-v*) name=nux-core; dir=crates/nux-core; version="${GITHUB_REF_NAME#nux-core-v}" ;;
+            nux-cli-v*)  name=nux-cli;  dir=crates/nux-cli;  version="${GITHUB_REF_NAME#nux-cli-v}" ;;
+            *)
+              echo "::error::tag inattendu ($GITHUB_REF_NAME) : préfixe nux-core-v ou nux-cli-v requis"
+              exit 1
+              ;;
+          esac
+          echo "name=$name" >> "$GITHUB_OUTPUT"
+          echo "dir=$dir" >> "$GITHUB_OUTPUT"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Vérifie que le tag correspond à la version du Cargo.toml
+        working-directory: ${{ steps.crate.outputs.dir }}
+        run: |
+          cargo_version="$(cargo metadata --no-deps --format-version 1 \
+            | jq -r '.packages[] | select(.name == "${{ steps.crate.outputs.name }}") | .version')"
+          if [ "${{ steps.crate.outputs.version }}" != "$cargo_version" ]; then
+            echo "::error::le tag (${{ steps.crate.outputs.version }}) ne correspond pas à la version dans Cargo.toml ($cargo_version)"
+            exit 1
+          fi
+
+      # Filet de sécurité indépendant de ci.yml : publie uniquement du code
+      # qui compile et passe clippy, même si le tag a été pointé sans passer
+      # par une PR vérifiée.
+      - name: cargo test
+        working-directory: ${{ steps.crate.outputs.dir }}
+        run: cargo test
+
+      - name: cargo clippy
+        working-directory: ${{ steps.crate.outputs.dir }}
+        run: cargo clippy --all-targets -- -D warnings
+
+      - name: cargo publish
+        working-directory: ${{ steps.crate.outputs.dir }}
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
+        run: cargo publish
