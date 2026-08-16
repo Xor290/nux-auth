@@ -1,5 +1,8 @@
 # Nux-Auth
 
+[![crates.io](https://img.shields.io/crates/v/nux-core.svg?label=nux-core)](https://crates.io/crates/nux-core)
+[![crates.io](https://img.shields.io/crates/v/nux-cli.svg?label=nux-cli)](https://crates.io/crates/nux-cli)
+
 Tunnels applicatifs chiffrés et authentifiés entre serveurs, bâtis sur la
 couche pair-à-pair de [`rust-libp2p`](https://libp2p.io/) — **sans VPN, sans
 serveur SSO central**. Un service qui doit en joindre un autre (base de
@@ -151,8 +154,8 @@ Détail par module (limites précises, tests associés) dans les
 
 | Crate | Rôle |
 |---|---|
-| [`nux-core`](crates/nux-core) | Bibliothèque : identité, pile réseau libp2p (TCP/Noise/Yamux + QUIC + relay-client + DCUtR), authentification, tunneling, rate limiting, durcissement. |
-| [`nux-cli`](crates/nux-cli) | Binaire `nux` : expose `nux-core` en ligne de commande (`keygen`, `guard`, `client`, `sync-config`), journalisation, lecture de `guard.toml`. |
+| [`nux-core`](crates/nux-core) ([crates.io](https://crates.io/crates/nux-core)) | Bibliothèque : identité, pile réseau libp2p (TCP/Noise/Yamux + QUIC + relay-client + DCUtR), authentification, tunneling, rate limiting, durcissement. |
+| [`nux-cli`](crates/nux-cli) ([crates.io](https://crates.io/crates/nux-cli)) | Binaire `nux` : expose `nux-core` en ligne de commande (`keygen`, `guard`, `client`, `sync-config`), journalisation, lecture de `guard.toml`. |
 
 ## Tests
 

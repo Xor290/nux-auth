@@ -1,0 +1,63 @@
+[workspace]
+resolver = "2"
+members = ["crates/nux-core", "crates/nux-cli"]
+
+# `fuzz/` reste volontairement hors du workspace (voir le commentaire dans
+# fuzz/Cargo.toml) : cargo-fuzz impose ses propres profils et flags.
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.85"
+repository = "https://github.com/Xor290/nux-auth"
+
+[workspace.lints.rust]
+unsafe_code = "deny"
+
+[workspace.lints.clippy]
+all = "deny"
+
+[workspace.dependencies]
+nux-core = { path = "crates/nux-core", version = "0.1.0" }
+
+libp2p = { version = "0.54", features = [
+    "tokio",
+    "tcp",
+    "noise",
+    "yamux",
+    "quic",
+    "relay",
+    "dcutr",
+    "rendezvous",
+    "request-response",
+    "ping",
+    "macros",
+] }
+libp2p-stream = "0.2.0-alpha"
+
+tokio = { version = "1", features = ["full"] }
+tokio-util = "0.7"
+
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+bincode = "1"
+toml = "0.8"
+toml_edit = "0.22"
+
+zeroize = "1"
+constant_time_eq = "0.3"
+rand = "0.8"
+sha2 = "0.10"
+hex = "0.4"
+
+futures = "0.3"
+async-trait = "0.1"
+thiserror = "1"
+
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+
+rustix = { version = "0.38", features = ["process"] }
+clap = { version = "4", features = ["derive"] }
+dotenvy = "0.15"
+reqwest = { version = "0.12", features = ["json"] }
