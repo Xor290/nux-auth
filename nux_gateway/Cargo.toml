@@ -1,0 +1,27 @@
+[package]
+name = "nux_gateway"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+nux-core = { workspace = true }
+axum = { workspace = true }
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+diesel = { workspace = true }
+diesel_migrations = { workspace = true }
+libsqlite3-sys = { workspace = true }
+dotenvy = { workspace = true }
+reqwest = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+constant_time_eq = { workspace = true }
+thiserror = { workspace = true }
+hex = { workspace = true }
+
+[lints]
+workspace = true
